@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery - События и методы (Вариант 1)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Шапка сайта */
+        header {
+            background: white;
+            padding: 20px 40px;
+            border-radius: 15px 15px 0 0;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-area img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+        }
+        
+        .logo-area h1 {
+            color: #333;
+            font-size: 28px;
+        }
+        
+        nav {
+            background: white;
+            padding: 10px 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        nav a {
+            color: #667eea;
+            text-decoration: none;
+            margin-right: 30px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: #764ba2;
+        }
+        
+        /* Основной контент */
+        main {
+            background: white;
+            border-radius: 0 0 15px 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+        
+        .task-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .task-section h2 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .task-section h3 {
+            color: #667eea;
+            margin: 15px 0 10px 0;
+            font-size: 18px;
+        }
+        
+        .code-block {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin: 15px 0;
+        }
+        
+        .code-block code {
+            color: #f8f8f2;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            margin: 10px 10px 10px 0;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .btn-reset {
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+        }
+        
+        .btn-info {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+        }
+        
+        .demo-box {
+            background: #fff;
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .info-panel {
+            background: #e8f4fd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+        
+        .info-panel p {
+            margin: 5px 0;
+        }
+        
+        .highlight {
+            background-color: #fff9c4;
+            transition: background-color 0.3s;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        .status-visible {
+            background: #2ecc71;
+            color: white;
+        }
+        
+        .status-hidden {
+            background: #e74c3c;
+            color: white;
+        }
+        
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+        
+        .selector-demo {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+        
+        .selector-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            flex: 1;
+            min-width: 200px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .selector-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Шапка сайта с логотипом -->
+        <header>
+            <div class="logo-area">
+                <img id="main-logo" src="https://via.placeholder.com/80x80/667eea/white?text=LOGO" alt="logo.jpg">
+                <h1 id="main_h1">Мой сайт</h1>
+            </div>
+            <div style="margin-left: auto;">
+                <div class="status-badge" id="logo-status">Виден</div>
+            </div>
+        </header>
+        
+        <nav>
+            <a href="#">Главная</a>
+            <a href="#">О нас</a>
+            <a href="#">Услуги</a>
+            <a href="#">Контакты</a>
+        </nav>
+        
+        <main>
+            <h2>Лабораторная работа: jQuery - события и методы</h2>
+            <p style="margin-bottom: 20px; color: #666;">Вариант 1 - Выборка логотипа тремя разными способами</p>
+            
+            <!-- Задание 1 - Демонстрация трех способов выборки -->
+            <div class="task-section">
+                <h2>📌 Задание 1</h2>
+                <p><strong>Условие:</strong> У нас есть пример, в котором мы отбираем картинку из шапки сайта logo.jpg способом: <code>$('img[src*=logo.jpg]').hide();</code></p>
+                <p><strong>Задача:</strong> Сделать выборку этого же элемента двумя другими способами на ваше усмотрение.</p>
+                
+                <div class="demo-box">
+                    <h3>🎯 Три способа выборки одного и того же элемента</h3>
+                    
+                    <div class="selector-demo">
+                        <div class="selector-card">
+                            <h4>Способ 1 (исходный)</h4>
+                            <code>$('img[src*="logo.jpg"]')</code>
+                            <p style="margin-top: 10px; font-size: 12px;">Поиск по частичному совпадению атрибута src</p>
+                        </div>
+                        <div class="selector-card">
+                            <h4>Способ 2 (по ID)</h4>
+                            <code>$('#main-logo')</code>
+                            <p style="margin-top: 10px; font-size: 12px;">Прямой доступ по уникальному идентификатору</p>
+                        </div>
+                        <div class="selector-card">
+                            <h4>Способ 3 (по родителю)</h4>
+                            <code>$('header .logo-area img')</code>
+                            <p style="margin-top: 10px; font-size: 12px;">Выборка по иерархии элементов</p>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 20px;">
+                        <button id="method1-btn">🔍 Способ 1 (исходный)</button>
+                        <button id="method2-btn">🔍 Способ 2 (по ID)</button>
+                        <button id="method3-btn">🔍 Способ 3 (по родителю)</button>
+                        <button id="show-all-btn" class="btn-info">👁️ Показать логотип</button>
+                        <button id="reset-logo" class="btn-reset">🔄 Сбросить состояние</button>
+                    </div>
+                    
+                    <div class="info-panel" id="selector-info">
+                        <p>💡 Нажмите на любую кнопку способа, чтобы выполнить анимацию hide/show для логотипа</p>
+                        <p>📊 Все три способа выбирают <strong>один и тот же элемент</strong> - логотип logo.jpg</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Дополнительная демонстрация изменения текста -->
+            <div class="task-section">
+                <h2>📝 Дополнительная демонстрация</h2>
+                <p>Пример из задания: изменение текста заголовка и анимация логотипа</p>
+                
+                <div class="code-block">
+                    <code>
+                        $(document).ready(function(){<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;var texH1 = $('#main_h1').text('текст измененный с помощью jquery');<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;var myLogo = $('img[src*=logo.jpg]').hide();<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;myLogo.hide(3000);<br>
+                        &nbsp;&nbsp;&nbsp;&nbsp;myLogo.show(3000);<br>
+                        });
+                    </code>
+                </div>
+                
+                <button id="demo-example-btn">▶️ Запустить пример из задания</button>
+                <button id="change-text-btn">✏️ Изменить текст заголовка</button>
+                <button id="reset-text-btn" class="btn-reset">🔄 Восстановить текст</button>
+                
+                <div class="info-panel" id="demo-info"></div>
+            </div>
+            
+            <!-- Информация о всех способах выборки -->
+            <div class="task-section">
+                <h2>📚 Объяснение способов выборки</h2>
+                
+                <h3>1. Исходный способ: <code>$('img[src*="logo.jpg"]')</code></h3>
+                <p>Использует селектор атрибута с подстрокой. Находит все изображения, у которых в атрибуте src содержится "logo.jpg".</p>
+                
+                <h3>2. Способ через ID: <code>$('#main-logo')</code></h3>
+                <p>Самый быстрый и эффективный способ. Использует уникальный идентификатор элемента. Рекомендуется для элементов, которые имеют ID.</p>
+                
+                <h3>3. Способ через иерархию: <code>$('header .logo-area img')</code></h3>
+                <p>Использует вложенность элементов. Находит все изображения внутри элемента с классом logo-area, который находится внутри header.</p>
+                
+                <div class="info-panel">
+                    <p>✅ <strong>Важно:</strong> Все три способа выбирают <strong>один и тот же DOM-элемент</strong> - наше изображение logo.jpg.</p>
+                    <p>🎯 Вы можете убедиться в этом, выполнив выбор разными способами - результат будет одинаковым.</p>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>Лабораторная работа по jQuery - Селекторы, события и методы | Вариант 1</p>
+        </footer>
+    </div>
+    
+    <script>
+        $(document).ready(function() {
+            // Переменная для хранения ссылки на логотип (для удобства)
+            var $logo = $('img[src*="logo.jpg"]');
+            
+            // Функция обновления статуса
+            function updateLogoStatus() {
+                var $logoCurrent = $('img[src*="logo.jpg"]');
+                if ($logoCurrent.is(':visible')) {
+                    $('#logo-status').text('Виден').removeClass('status-hidden').addClass('status-visible');
+                } else {
+                    $('#logo-status').text('Скрыт').removeClass('status-visible').addClass('status-hidden');
+                }
+            }
+            
+            // ========== ДЕМОНСТРАЦИЯ ТРЁХ СПОСОБОВ ВЫБОРКИ ==========
+            
+            // Способ 1: исходный (по атрибуту src)
+            $('#method1-btn').click(function() {
+                var $logo1 = $('img[src*="logo.jpg"]');
+                addLogMessage('Способ 1: $(\'img[src*="logo.jpg"]\') - Найдено элементов: ' + $logo1.length);
+                
+                if ($logo1.length > 0) {
+                    $logo1.hide(1000, function() {
+                        addLogMessage('Логотип скрыт (способ 1)');
+                        updateLogoStatus();
+                    });
+                    setTimeout(function() {
+                        $logo1.show(1000, function() {
+                            addLogMessage('Логотип показан (способ 1)');
+                            updateLogoStatus();
+                        });
+                    }, 1200);
+                }
+            });
+            
+            // Способ 2: по ID
+            $('#method2-btn').click(function() {
+                var $logo2 = $('#main-logo');
+                addLogMessage('Способ 2: $(\'#main-logo\') - Найдено элементов: ' + $logo2.length);
+                
+                if ($logo2.length > 0) {
+                    $logo2.hide(1000, function() {
+                        addLogMessage('Логотип скрыт (способ 2)');
+                        updateLogoStatus();
+                    });
+                    setTimeout(function() {
+                        $logo2.show(1000, function() {
+                            addLogMessage('Логотип показан (способ 2)');
+                            updateLogoStatus();
+                        });
+                    }, 1200);
+                }
+            });
+            
+            // Способ 3: по иерархии (родительским элементам)
+            $('#method3-btn').click(function() {
+                var $logo3 = $('header .logo-area img');
+                addLogMessage('Способ 3: $(\'header .logo-area img\') - Найдено элементов: ' + $logo3.length);
+                
+                if ($logo3.length > 0) {
+                    $logo3.hide(1000, function() {
+                        addLogMessage('Логотип скрыт (способ 3)');
+                        updateLogoStatus();
+                    });
+                    setTimeout(function() {
+                        $logo3.show(1000, function() {
+                            addLogMessage('Логотип показан (способ 3)');
+                            updateLogoStatus();
+                        });
+                    }, 1200);
+                }
+            });
+            
+            // Показать логотип
+            $('#show-all-btn').click(function() {
+                var $logoShow = $('img[src*="logo.jpg"]');
+                $logoShow.show(500);
+                addLogMessage('Логотип показан');
+                updateLogoStatus();
+            });
+            
+            // Сброс состояния логотипа
+            $('#reset-logo').click(function() {
+                var $logoReset = $('img[src*="logo.jpg"]');
+                $logoReset.show(300);
+                addLogMessage('Состояние логотипа сброшено');
+                updateLogoStatus();
+            });
+            
+            // ========== ДЕМОНСТРАЦИЯ ПРИМЕРА ИЗ ЗАДАНИЯ ==========
+            
+            $('#demo-example-btn').click(function() {
+                addDemoMessage('▶️ Запуск примера из задания...');
+                
+                // Изменяем текст заголовка
+                $('#main_h1').text('текст измененный с помощью jquery');
+                addDemoMessage('✓ Текст заголовка изменен на: "текст измененный с помощью jquery"');
+                
+                // Получаем логотип
+                var myLogo = $('img[src*="logo.jpg"]');
+                addDemoMessage('✓ Логотип найден: ' + myLogo.length + ' элемент');
+                
+                // Анимация скрытия на 3 секунды
+                addDemoMessage('🎬 Начинаем анимацию hide(3000)...');
+                myLogo.hide(3000, function() {
+                    addDemoMessage('✓ Логотип полностью скрыт (hide завершен)');
+                    updateLogoStatus();
+                });
+                
+                // Анимация показа через 3.5 секунды (чтобы hide успел завершиться)
+                setTimeout(function() {
+                    addDemoMessage('🎬 Начинаем анимацию show(3000)...');
+                    myLogo.show(3000, function() {
+                        addDemoMessage('✓ Логотип полностью показан (show завершен)');
+                        updateLogoStatus();
+                    });
+                }, 3200);
+            });
+            
+            // Изменение текста заголовка
+            $('#change-text-btn').click(function() {
+                var newText = prompt('Введите новый текст для заголовка:', 'Новый заголовок');
+                if (newText && newText.trim()) {
+                    $('#main_h1').text(newText);
+                    addDemoMessage('✏️ Текст заголовка изменен на: "' + newText + '"');
+                }
+            });
+            
+            // Восстановление текста заголовка
+            $('#reset-text-btn').click(function() {
+                $('#main_h1').text('Мой сайт');
+                addDemoMessage('🔄 Текст заголовка восстановлен: "Мой сайт"');
+            });
+            
+            // Функция для добавления сообщений в информационную панель селекторов
+            function addLogMessage(message) {
+                var currentTime = new Date().toLocaleTimeString();
+                var $infoPanel = $('#selector-info');
+                var newMessage = $('<p>🕒 ' + currentTime + ' - ' + message + '</p>');
+                $infoPanel.prepend(newMessage);
+                
+                // Ограничиваем количество сообщений (оставляем последние 5)
+                if ($infoPanel.children('p').length > 6) {
+                    $infoPanel.children('p:last').remove();
+                }
+            }
+            
+            // Функция для добавления сообщений в панель демо
+            function addDemoMessage(message) {
+                var currentTime = new Date().toLocaleTimeString();
+                var $demoInfo = $('#demo-info');
+                var newMessage = $('<p>📌 ' + currentTime + ' - ' + message + '</p>');
+                $demoInfo.prepend(newMessage);
+                
+                if ($demoInfo.children('p').length > 5) {
+                    $demoInfo.children('p:last').remove();
+                }
+            }
+            
+            // Инициализация - проверяем что логотип существует и отображаем начальное состояние
+            console.log('=== Инициализация jQuery ===');
+            console.log('Логотип найден способом 1:', $('img[src*="logo.jpg"]').length);
+            console.log('Логотип найден способом 2:', $('#main-logo').length);
+            console.log('Логотип найден способом 3:', $('header .logo-area img').length);
+            
+            // Проверка что все три способа выбирают один и тот же элемент
+            var logo1 = $('img[src*="logo.jpg"]')[0];
+            var logo2 = $('#main-logo')[0];
+            var logo3 = $('header .logo-area img')[0];
+            
+            if (logo1 === logo2 && logo2 === logo3) {
+                console.log('✅ Все три способа выбирают ОДИН И ТОТ ЖЕ элемент!');
+                $('#selector-info').prepend('<p style="color: green; font-weight: bold;">✅ Успех! Все три способа выбирают один и тот же элемент (логотип)</p>');
+            } else {
+                console.log('❌ Ошибка: способы выбирают разные элементы');
+            }
+            
+            updateLogoStatus();
+            
+            // Дополнительная демонстрация: показываем информацию о элементах
+            $('#selector-info').prepend('<p style="background: #d4edda; padding: 5px; border-radius: 5px;">🔍 Три способа выборки логотипа работают и дают одинаковый результат!</p>');
+        });
+    </script>
+</body>
+</html>

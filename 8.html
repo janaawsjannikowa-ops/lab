@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Лабораторная работа - Вариант 1</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Стили для блоков */
+        .block {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .block h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        
+        /* Стили для выделения */
+        .highlight-task1 {
+            background-color: #ffeb3b !important;
+            border: 2px solid #f9a825 !important;
+            padding: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .highlight-task2 {
+            background-color: #81c784 !important;
+            border: 2px solid #388e3c !important;
+            padding: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .highlight-task3 {
+            background-color: #64b5f6 !important;
+            border: 2px solid #1565c0 !important;
+            font-weight: bold !important;
+            transition: all 0.3s ease;
+        }
+        
+        /* Стили для кнопок */
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn-task1 {
+            background-color: #ff9800;
+            color: white;
+        }
+        
+        .btn-task1:hover {
+            background-color: #f57c00;
+        }
+        
+        .btn-task2 {
+            background-color: #4caf50;
+            color: white;
+        }
+        
+        .btn-task2:hover {
+            background-color: #388e3c;
+        }
+        
+        .btn-task3 {
+            background-color: #2196f3;
+            color: white;
+        }
+        
+        .btn-task3:hover {
+            background-color: #1976d2;
+        }
+        
+        .btn-clear {
+            background-color: #9e9e9e;
+            color: white;
+        }
+        
+        .btn-clear:hover {
+            background-color: #757575;
+        }
+        
+        /* Стили для списка */
+        #my_links ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        #my_links li {
+            padding: 10px;
+            margin: 5px 0;
+            background-color: #fafafa;
+            border-left: 3px solid #ddd;
+        }
+        
+        #my_links a {
+            text-decoration: none;
+            color: #1976d2;
+        }
+        
+        #my_links a:hover {
+            text-decoration: underline;
+        }
+        
+        /* Стили для таблицы */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #e0e0e0;
+        }
+        
+        tr {
+            transition: background-color 0.3s ease;
+        }
+        
+        /* Информационная панель */
+        .info-panel {
+            background-color: #fff3e0;
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+        
+        .info-panel h4 {
+            margin: 0 0 10px 0;
+            color: #e65100;
+}
+        
+        .info-text {
+            font-family: monospace;
+            font-size: 14px;
+            color: #555;
+        }
+        
+        .counter {
+            font-weight: bold;
+            color: #ff9800;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>📚 Вариант 1</h1>
+    
+    <!-- Кнопки управления -->
+    <div class="button-group">
+        <button class="btn btn-task1" id="btnTask1">📌 Задание 1: li с ссылками</button>
+        <button class="btn btn-task2" id="btnTask2">🔗 Задание 2: ссылки на "documents"</button>
+        <button class="btn btn-task3" id="btnTask3">📊 Задание 3: последние ячейки в четных строках</button>
+        <button class="btn btn-clear" id="btnClear">🗑️ Очистить выделение</button>
+    </div>
+    
+    <div class="block" id="block1">
+        <h3>📁 Блок с id="my_links"</h3>
+        <div id="my_links">
+            <ul>
+                <li><a href="documents/report.pdf">📄 Отчёт (documents/report.pdf)</a></li>
+                <li><a href="images/photo.jpg">🖼️ Фото (images/photo.jpg)</a></li>
+                <li><a href="documents/manual.docx">📘 Инструкция (documents/manual.docx)</a></li>
+                <li>📝 Обычный пункт без ссылки</li>
+                <li><a href="presentation.pptx">🎯 Презентация (presentation.pptx)</a></li>
+                <li><a href="documents/contract.pdf">📑 Договор (documents/contract.pdf)</a></li>
+                <li><a href="documents/specification.doc">⚙️ Спецификация (documents/specification.doc)</a></li>
+                <li>🔍 Ещё один пункт без ссылки</li>
+                <li><a href="other/file.txt">📁 Другой файл (other/file.txt)</a></li>
+            </ul>
+        </div>
+        <div class="info-text">
+            <strong>Задание 1:</strong> Выбрать элементы &lt;li&gt; внутри #my_links, которые содержат &lt;a&gt;<br>
+            <strong>Задание 2:</strong> Выбрать ссылки внутри #my_links, у которых href начинается с "documents"
+        </div>
+    </div>
+    <div class="block" id="block2">
+        <h3>🏍️ Таблица с id="moto_table"</h3>
+        <div style="overflow-x: auto;">
+            <table id="moto_table">
+                <thead>
+                    <tr>
+                        <th>№ строки</th>
+                        <th>Модель мотоцикла</th>
+                        <th>Год выпуска</th>
+                        <th>Объём двигателя</th>
+                        <th>Страна</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="background-color: #fff;">
+                        <td>1 (нечётная)</td>
+                        <td>Yamaha R1</td>
+                        <td>2020</td>
+                        <td>998 см³</td>
+                        <td>Япония</td>
+                    </tr>
+                    <tr style="background-color: #f9f9f9;">
+                        <td>2 (чётная)</td>
+                        <td>Suzuki GSX-R1000</td>
+                        <td>2019</td>
+                        <td>999 см³</td>
+                        <td>Япония</td>
+                    </tr>
+                    <tr style="background-color: #fff;">
+                        <td>3 (нечётная)</td>
+                        <td>Ducati Panigale V4</td>
+                        <td>2021</td>
+                        <td>1103 см³</td>
+                        <td>Италия</td>
+                    </tr>
+                    <tr style="background-color: #f9f9f9;">
+                        <td>4 (чётная)</td>
+                        <td>Honda CBR1000RR</td>
+                        <td>2020</td>
+                        <td>999 см³</td>
+                        <td>Япония</td>
+                    </tr>
+                    <tr style="background-color: #fff;">
+                        <td>5 (нечётная)</td>
+                        <td>Kawasaki Ninja ZX-10R</td>
+                        <td>2022</td>
+<td>998 см³</td>
+                        <td>Япония</td>
+                    </tr>
+                    <tr style="background-color: #f9f9f9;">
+                        <td>6 (чётная)</td>
+                        <td>BMW S1000RR</td>
+                        <td>2021</td>
+                        <td>999 см³</td>
+                        <td>Германия</td>
+                    </tr>
+                    <tr style="background-color: #fff;">
+                        <td>7 (нечётная)</td>
+                        <td>Aprilia RSV4</td>
+                        <td>2020</td>
+                        <td>1077 см³</td>
+                        <td>Италия</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="info-text" style="margin-top: 10px;">
+            <strong>Задание 3:</strong> Выбрать последние ячейки (&lt;td&gt;) в четных строках таблицы #moto_table<br>
+            <span style="color: #666;">* Индексация строк начинается с 0, поэтому :even выбирает 1-ю, 3-ю, 5-ю, 7-ю строки</span>
+        </div>
+    </div>
+    
+    <!-- Информационная панель -->
+    <div class="info-panel" id="infoPanel">
+        <h4>📊 Результаты выполнения:</h4>
+        <div id="resultInfo">
+            Нажмите на кнопку задания для просмотра результатов
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $("#btnTask1").click(function() {
+            clearHighlights();
+            var elements = $("#my_links li:has(a)");
+            elements.addClass("highlight-task1");
+            if(elements.length > 0) {
+                $('html, body').animate({
+                    scrollTop: elements.first().offset().top - 100
+                }, 500);
+            }
+            var elementList = [];
+            elements.each(function(index) {
+                var text = $(this).text().trim().substring(0, 50);
+                elementList.push((index+1) + ". " + text);
+            });
+            
+            $("#resultInfo").html(`
+                <strong>✅ Задание 1 выполнено!</strong><br>
+                <strong>Селектор:</strong> $("#my_links li:has(a)")<br>
+                <strong>Найдено элементов:</strong> <span class="counter">${elements.length}</span><br>
+                <strong>Найденные элементы (li с ссылками):</strong><br>
+                ${elementList.join("<br>")}
+            `);
+        });
+        $("#btnTask2").click(function() {
+            clearHighlights();
+            var elements = $("#my_links a[href^='documents']");
+            elements.addClass("highlight-task2");
+            elements.parent("li").addClass("highlight-task2");
+            if(elements.length > 0) {
+                $('html, body').animate({
+                    scrollTop: elements.first().offset().top - 100
+                }, 500);
+            }
+            var elementList = [];
+            elements.each(function(index) {
+                var href = $(this).attr("href");
+                var text = $(this).text().trim();
+                elementList.push((index+1) + ". " + text + " → " + href);
+            });
+            
+            $("#resultInfo").html(`
+                <strong>✅ Задание 2 выполнено!</strong><br>
+                <strong>Селектор:</strong> $("#my_links a[href^='documents']")<br>
+<strong>Найдено ссылок:</strong> <span class="counter">${elements.length}</span><br>
+                <strong>Найденные ссылки (href начинается с "documents"):</strong><br>
+                ${elementList.join("<br>")}
+            `);
+        });
+        
+        $("#btnTask3").click(function() {
+            clearHighlights();
+
+            var elements = $("#moto_table tr:even > td:last-child");
+            elements.addClass("highlight-task3");
+            if(elements.length > 0) {
+                $('html, body').animate({
+                    scrollTop: elements.first().offset().top - 100
+                }, 500);
+            }
+            var elementList = [];
+            elements.each(function(index) {
+                var rowIndex = $(this).closest("tr").index();
+                var value = $(this).text().trim();
+                elementList.push((index+1) + ". Строка " + (rowIndex+1) + " (индекс " + rowIndex + ") → " + value);
+            });
+            
+            $("#resultInfo").html(`
+                <strong>✅ Задание 3 выполнено!</strong><br>
+                <strong>Селектор:</strong> $("#moto_table tr:even > td:last-child")<br>
+                <strong>Найдено ячеек:</strong> <span class="counter">${elements.length}</span><br>
+                <strong>Найденные ячейки (последние ячейки в чётных строках):</strong><br>
+                ${elementList.join("<br>")}<br><br>
+                <span style="font-size: 12px; color: #666;">💡 Примечание: индексация строк начинается с 0, поэтому :even даёт строки с номерами 1, 3, 5, 7...</span>
+            `);
+        });
+        
+        // ========== ОЧИСТКА ВЫДЕЛЕНИЯ ==========
+        $("#btnClear").click(function() {
+            clearHighlights();
+            $("#resultInfo").html("Выделение очищено. Нажмите на кнопку задания для просмотра результатов.");
+        });
+        
+        // Функция очистки всех выделений
+        function clearHighlights() {
+            $(".highlight-task1").removeClass("highlight-task1");
+            $(".highlight-task2").removeClass("highlight-task2");
+            $(".highlight-task3").removeClass("highlight-task3");
+        }
+        
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+/* src/Lab1.css */
+.lab1-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.task-card {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.task-card h3 {
+  color: #333;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #eee;
+}
+
+/* Задание 1 */
+.date-container {
+  text-align: center;
+  padding: 20px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  border-radius: 10px;
+}
+
+.date-main {
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+}
+
+/* Задание 2 */
+.stocks-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.stocks-table th {
+  background: #34495e;
+  color: white;
+  padding: 10px;
+  text-align: left;
+}
+
+.stocks-table td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.stocks-table tr:hover {
+  background: #f5f5f5;
+}
+
+/* Задание 3 - Шахматная доска с нотациями со всех сторон */
+.chess-full {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.top-notation, .bottom-notation {
+  display: flex;
+}
+
+.bottom-notation {
+  margin-top: 5px;
+}
+
+.top-notation {
+  margin-bottom: 5px;
+}
+
+.chess-middle {
+  display: flex;
+}
+
+.left-notation, .right-notation {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.left-notation {
+  margin-right: 5px;
+}
+
+.right-notation {
+  margin-left: 5px;
+}
+
+.num {
+  width: 30px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.letter {
+  width: 50px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.corner {
+  width: 30px;
+  height: 30px;
+}
+
+.board {
+  border: 2px solid #333;
+}
+
+.row {
+  display: flex;
+}
+
+.cell {
+  width: 50px;
+  height: 50px;
+}
+
+.cell.white {
+  background-color: #f0d9b5;
+}
+
+.cell.black {
+  background-color: #b58863;
+}
+
+/* Адаптация под маленькие экраны */
+@media (max-width: 700px) {
+  .cell {
+    width: 35px;
+    height: 35px;
+  }
+  .letter {
+    width: 35px;
+  }
+  .num {
+    height: 35px;
+  }
+}
+
+@media (max-width: 500px) {
+  .cell {
+    width: 30px;
+    height: 30px;
+  }
+  .letter {
+    width: 30px;
+    font-size: 12px;
+  }
+  .num {
+    height: 30px;
+    font-size: 12px;
+  }
+}

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<head>
+    <title>Лабораторная работа: события Focus, Select, Blur</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .block {
+            background: white;
+            margin-bottom: 25px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        input, button {
+            margin: 5px 5px 5px 0;
+            padding: 8px;
+            font-size: 14px;
+        }
+        .result {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #2c3e50;
+            background: #eef;
+            padding: 8px;
+            border-radius: 5px;
+        }
+        hr {
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="block">
+    <h1> Площадь треугольника </h1>
+    <p>Введите координаты трёх точек</p>
+    <label>A (x1, y1):</label>
+    <input type="number" id="x1" value="0" step="any"> 
+    <input type="number" id="y1" value="0" step="any"><br>
+    <label>B (x2, y2):</label>
+    <input type="number" id="x2" value="4" step="any"> 
+    <input type="number" id="y2" value="0" step="any"><br>
+    <label>C (x3, y3):</label>
+    <input type="number" id="x3" value="0" step="any"> 
+    <input type="number" id="y3" value="3" step="any"><br>
+    <div class="result" id="areaResult">Площадь: 6.00</div>
+    <small>* Щёлкните по любому полю ввода для пересчёта</small>
+</div>
+<div class="block">
+    <h3> Расстояние до начала координат </h3>
+    <p>Введите координаты точки. При выделении текста в любом поле обновится расстояние.</p>
+    <label>X:</label>
+    <input type="number" id="pointX" value="3" step="any">
+    <label>Y:</label>
+    <input type="number" id="pointY" value="4" step="any"><br>
+    <div class="result" id="distanceResult">Расстояние: 5.00</div>
+    <small>* Выделите мышкой содержимое любого поля для обновления.</small>
+</div>
+<div class="block">
+    <h3> Обмен значений </h3>
+    <p>Введите два числа. При потере фокуса любым полем значения поменяются местами.</p>
+    <label>Переменная A:</label>
+    <input type="number" id="varA" value="10" step="any"><br>
+    <label>Переменная B:</label>
+    <input type="number" id="varB" value="99" step="any"><br>
+    <div class="result" id="swapResult">Текущие значения: A = 10, B = 99</div>
+    <small>* Кликните вне поля ввода  — значения поменяются местами.</small>
+</div>
+
+<script>
+    function calculateTriangleArea() {
+        let x1 = parseFloat(document.getElementById('x1').value);
+        let y1 = parseFloat(document.getElementById('y1').value);
+        let x2 = parseFloat(document.getElementById('x2').value);
+        let y2 = parseFloat(document.getElementById('y2').value);
+        let x3 = parseFloat(document.getElementById('x3').value);
+        let y3 = parseFloat(document.getElementById('y3').value);
+        if (isNaN(x1) || isNaN(y1) || isNaN(x2) || isNaN(y2) || isNaN(x3) || isNaN(y3)) {
+            document.getElementById('areaResult').innerHTML = 'Площадь: некорректные координаты';
+            return;
+        }
+        let area = Math.abs((x2 - x1) * (y3 - y1) - (x3 - x1) * (y2 - y1)) / 2;
+        document.getElementById('areaResult').innerHTML = `Площадь: ${area.toFixed(2)}`;
+    }
+    const triangleInputs = ['x1', 'y1', 'x2', 'y2', 'x3', 'y3'];
+    triangleInputs.forEach(id => {
+        let input = document.getElementById(id);
+        if (input) {
+            input.addEventListener('focus', calculateTriangleArea);
+        }
+    });
+    calculateTriangleArea();
+    function calculateDistance() {
+        let x = parseFloat(document.getElementById('pointX').value);
+        let y = parseFloat(document.getElementById('pointY').value);
+        
+        if (isNaN(x) || isNaN(y)) {
+            document.getElementById('distanceResult').innerHTML = 'Расстояние: некорректные координаты';
+            return;
+        }
+        
+        let distance = Math.sqrt(x * x + y * y);
+        document.getElementById('distanceResult').innerHTML = `Расстояние: ${distance.toFixed(4)}`;
+    }
+    document.getElementById('pointX').addEventListener('select', calculateDistance);
+    document.getElementById('pointY').addEventListener('select', calculateDistance);
+    calculateDistance();
+    function swapValues() {
+        let inputA = document.getElementById('varA');
+        let inputB = document.getElementById('varB');
+        let aVal = inputA.value;
+        let bVal = inputB.value;
+        inputA.value = bVal;
+        inputB.value = aVal;
+        document.getElementById('swapResult').innerHTML = `Текущие значения: A = ${bVal}, B = ${aVal}`;
+    }
+    document.getElementById('varA').addEventListener('blur', swapValues);
+    document.getElementById('varB').addEventListener('blur', swapValues);
+    function updateSwapDisplay() {
+        let a = document.getElementById('varA').value;
+        let b = document.getElementById('varB').value;
+        document.getElementById('swapResult').innerHTML = `Текущие значения: A = ${a}, B = ${b}`;
+    }
+    updateSwapDisplay();
+    document.getElementById('varA').addEventListener('input', updateSwapDisplay);
+    document.getElementById('varB').addEventListener('input', updateSwapDisplay);
+</script>
+</body>
+</html>

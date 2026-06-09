@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<head>
+    <title>Ввод ФИО</title>
+</head>
+<body>
+    <h1>1. Ввод и проверка ФИО (встроенный скрипт)</h1>
+    <button onclick="askFullName()">Ввести ФИО</button>
+    <script>
+        function askFullName() {
+            let surname = prompt("Введите свою фамилию:");
+            if (surname === null || surname.trim() === "") {
+                alert("Ошибка: фамилия не введена!");
+                return;
+            }
+            let name = prompt("Введите своё имя:");
+            if (name === null || name.trim() === "") {
+                alert("Ошибка: имя не введено!");
+                return;
+            }
+            let patronymic = prompt("Введите своё отчество:");
+            if (patronymic === null || patronymic.trim() === "") {
+                alert("Ошибка: отчество не введено!");
+                return;
+            }
+            let fullName = surname.trim() + " " + name.trim() + " " + patronymic.trim();
+            let isCorrect = confirm("Вас зовут: " + fullName + "?\nВсё верно?");
+            if (isCorrect) {
+                alert("Молодец, " + name.trim() + " " + patronymic.trim() + "!\nСпасибо!");
+            } else {
+                alert("Ошибка ввода! Попробуйте снова.");
+            }
+        }
+    </script>
+</body>
+</html>

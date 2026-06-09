@@ -1,10 +1,70 @@
 <!DOCTYPE html>
+<html lang="ru">
 <head>
-    <title>Считаем гипотенузу</title>
+    <meta charset="UTF-8">
+    <title>Список учащихся</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+        }
+        .student-list {
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+            max-width: 400px;
+        }
+        .student-item {
+            padding: 5px 0;
+            border-bottom: 1px solid #ddd;
+        }
+        .title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body>
-    <h1>2. Вычисление гипотенузы </h1>
-    <button onclick="calculateHypotenuse()">Вычислить гипотенузу</button>
-    <script src="script.js"></script>
+    <div class="student-list" id="output"></div>
+
+    <script>
+        let students = [];
+        let countInput = prompt("Введите количество учащихся в группе:");
+        if (countInput === null) {
+            document.getElementById("output").innerHTML = "<div class='title'>Операция отменена</div>";
+        } else {
+            let count = parseInt(countInput);
+            if (isNaN(count) || count <= 0) {
+                document.getElementById("output").innerHTML = "<div class='title'>Ошибка: введите корректное положительное число</div>";
+            } else {
+                for (let i = 1; i <= count; i++) {
+                    let fullName = prompt(`Введите фамилию и имя учащегося №${i} (например: Иванов Иван):`);
+                    if (fullName === null) {
+                        alert("Ввод данных прерван. Список будет неполным.");
+                        break;
+                    }
+                    fullName = fullName.trim();
+                    if (fullName === "") {
+                        alert(`Для учащегося №${i} не введены данные. Пропускаем.`);
+                        continue;
+                    }
+                    
+                    students.push(fullName);
+                }
+                if (students.length === 0) {
+                    document.getElementById("output").innerHTML = "<div class='title'>Список учащихся пуст</div>";
+                } else {
+                    let html = `<div class='title'>Список учащихся группы (${students.length} человек):</div>`;
+                    for (let i = 0; i < students.length; i++) {
+                        html += `<div class='student-item'>${i + 1}. ${students[i]}</div>`;
+                    }
+                    document.getElementById("output").innerHTML = html;
+                }
+            }
+        }
+    </script>
 </body>
 </html>

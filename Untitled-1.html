@@ -1,35 +1,28 @@
 <!DOCTYPE html>
 <head>
-    <title>Ввод ФИО</title>
+    <title>Авторизация</title>
 </head>
 <body>
-    <h1>1. Ввод и проверка ФИО (встроенный скрипт)</h1>
-    <button onclick="askFullName()">Ввести ФИО</button>
+    <h1>Введите логин</h1>
+    <button onclick="askFullName()">Ввести логин</button>
     <script>
-        function askFullName() {
-            let surname = prompt("Введите свою фамилию:");
-            if (surname === null || surname.trim() === "") {
-                alert("Ошибка: фамилия не введена!");
-                return;
-            }
-            let name = prompt("Введите своё имя:");
-            if (name === null || name.trim() === "") {
-                alert("Ошибка: имя не введено!");
-                return;
-            }
-            let patronymic = prompt("Введите своё отчество:");
-            if (patronymic === null || patronymic.trim() === "") {
-                alert("Ошибка: отчество не введено!");
-                return;
-            }
-            let fullName = surname.trim() + " " + name.trim() + " " + patronymic.trim();
-            let isCorrect = confirm("Вас зовут: " + fullName + "?\nВсё верно?");
-            if (isCorrect) {
-                alert("Молодец, " + name.trim() + " " + patronymic.trim() + "!\nСпасибо!");
+    function askFullName(){
+       let login = prompt("Введите логин:");
+       if (login === null) {
+         alert("Вход отменён");
+        } else if (login === "Админ") {
+            let password = prompt("Введите пароль:");
+            if (password === null) {
+                alert("Вход отменён");
+            } else if (password === "Чёрный Властелин") {
+                alert("Добро пожаловать!");
             } else {
-                alert("Ошибка ввода! Попробуйте снова.");
+                alert("Пароль неверен");
             }
+        } else {
+            alert("Я вас не знаю");
         }
+    }
     </script>
 </body>
 </html>

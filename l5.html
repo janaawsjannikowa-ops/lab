@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Лабораторная работа</title>
+
+<style>
+body{
+    font-family: Arial;
+    padding:20px;
+}
+
+table{
+    border-collapse: collapse;
+    width:100%;
+    margin-top:15px;
+}
+
+th, td{
+    border:1px solid #ccc;
+    padding:8px;
+}
+
+input, button{
+    padding:5px;
+    margin:5px;
+}
+
+.result{
+    margin-top:15px;
+    padding:10px;
+    background:#f0f0f0;
+}
+</style>
+</head>
+
+<body>
+
+<h2>Задание 1</h2>
+
+<input type="time" id="timeInput" value="10:30">
+<button onclick="calcMinutes()">Рассчитать</button>
+
+<div id="minutesResult" class="result"></div>
+
+<hr>
+
+<h2>Задание 2</h2>
+
+<table border="1">
+<thead>
+<tr>
+    <th>Фамилия</th>
+    <th>Оплата за час</th>
+    <th>Дата начала</th>
+    <th>Дата окончания</th>
+</tr>
+</thead>
+<tbody id="empBody"></tbody>
+</table>
+
+<button onclick="Data.addRow()">Добавить</button>
+<button onclick="Data.calculate()">Рассчитать</button>
+
+<div id="results" class="result"></div>
+
+<script>
+// =====================
+// ЗАДАНИЕ 1
+// =====================
+function calcMinutes(){
+    let value = document.getElementById("timeInput").value;
+    if(value === ""){
+        document.getElementById("minutesResult").innerHTML = "Введите время";
+        return;
+    }
+    let date = new Date("2025-01-01T" + value);
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    let startHours = 9;
+    let startMinutes = 0;
+    let total = hours * 60 + minutes;
+    let start = startHours * 60 + startMinutes;
+    if(total < start){
+        document.getElementById("minutesResult").innerHTML = "Занятие еще не началось";
+    }else{
+        let diff = total - start;
+        document.getElementById("minutesResult").innerHTML = "От начала занятия прошло " + diff + " минут";
+    }
+}
+
+// =====================
+// ЗАДАНИЕ 2
+// =====================
+const Data = {
+    employees: [],
+
+    // Сохранение в localStorage
+    saveToStorage: function(){
+        localStorage.setItem("employeesData", JSON.stringify(this.employees));
+        console.log("Сохранено:", this.employees); // Для отладки
+    },
+
+    // Загрузка из localStorage
+    loadFromStorage: function(){
+        let saved = localStorage.getItem("employeesData");
+        console.log("Загружено из storage:", saved); // Для отладки
+        
+        if(saved){
+            this.employees = JSON.parse(saved);
+        }else{
+            // Данные по умолчанию
+            this.employees = [
+                {lastName:"Иванов", rate:250, start:"2025-04-01", end:"2025-04-10"},
+                {lastName:"Петров", rate:300, start:"2025-04-05", end:"2025-04-15"},
+                {lastName:"Сидоров", rate:280, start:"2025-04-07", end:"2025-04-20"},
+                {lastName:"Козлова", rate:350, start:"2025-04-01", end:"2025-04-12"},
+                {lastName:"Морозов", rate:320, start:"2025-04-10", end:"2025-04-25"},
+                {lastName:"Васильева", rate:400, start:"2025-04-03", end:"2025-04-18"},
+                {lastName:"Никитин", rate:270, start:"2025-04-08", end:"2025-04-22"}
+            ];
+            this.saveToStorage();
+        }
+        this.renderTable();
+    },
+
+    renderTable: function(){
+        let body = document.getElementById("empBody");
+        if(!body){
+            console.error("Элемент empBody не найден!");
+            return;
+        }
+        body.innerHTML = "";
+        
+        for(let i = 0; i < this.employees.length; i++){
+            let e = this.employees[i];
+            let row = body.insertRow();
+            
+            let cell1 = row.insertCell(0);
+            let input1 = document.createElement("input");
+            input1.type = "text";
+            input1.value = e.lastName;
+            input1.onchange = function(){ Data.updateField(i, 'lastName', this.value); };
+            cell1.appendChild(input1);
+            
+            let cell2 = row.insertCell(1);
+            let input2 = document.createElement("input");
+            input2.type = "number";
+            input2.value = e.rate;
+            input2.onchange = function(){ Data.updateField(i, 'rate', parseFloat(this.value)); };
+            cell2.appendChild(input2);
+            
+            let cell3 = row.insertCell(2);
+            let input3 = document.createElement("input");
+            input3.type = "date";
+            input3.value = e.start;
+            input3.onchange = function(){ Data.updateField(i, 'start', this.value); };
+            cell3.appendChild(input3);
+            
+            let cell4 = row.insertCell(3);
+            let input4 = document.createElement("input");
+            input4.type = "date";
+            input4.value = e.end;
+            input4.onchange = function(){ Data.updateField(i, 'end', this.value); };
+            cell4.appendChild(input4);
+        }
+    },
+
+    updateField: function(index, field, value){
+        this.employees[index][field] = value;
+        this.saveToStorage();
+    },
+
+    addRow: function(){
+        this.employees.push({lastName:"Новый", rate:100, start:"2025-04-01", end:"2025-04-05"});
+        this.renderTable();
+        this.saveToStorage();
+    },
+
+    workDays: function(startStr, endStr){
+        if(!startStr || !endStr) return 0;
+        let start = new Date(startStr);
+        let end = new Date(endStr);
+        let days = 0;
+        let current = new Date(start);
+        while(current <= end){
+            let day = current.getDay();
+            if(day != 0 && day != 6) days++;
+            current.setDate(current.getDate() + 1);
+        }
+        return days;
+    },
+
+    weekendDays: function(startStr, endStr){
+        if(!startStr || !endStr) return 0;
+        let start = new Date(startStr);
+        let end = new Date(endStr);
+        let days = 0;
+        let current = new Date(start);
+        while(current <= end){
+            let day = current.getDay();
+            if(day == 0 || day == 6) days++;
+            current.setDate(current.getDate() + 1);
+        }
+        return days;
+    },
+
+    calculate: function(){
+        let html = "<h3>Результаты расчета:</h3>";
+        for(let i = 0; i < this.employees.length; i++){
+            let e = this.employees[i];
+            if(!e.lastName || !e.start  || !e.end || !e.rate){
+                html += <div><b>${e.lastName || "Нет фамилии"}</b> - данные не заполнены</div>;
+                continue;
+            }
+            let work = this.workDays(e.start, e.end);
+            let weekend = this.weekendDays(e.start, e.end);
+            let money = work * 8 * parseFloat(e.rate);
+            html += `
+                <div style="margin-bottom:15px; border-bottom:1px solid #ccc;">
+                    <b>${e.lastName}</b><br>
+                    Рабочих дней: ${work}<br>
+                    Выходных дней: ${weekend}<br>
+                    Гонорар: ${money} руб.
+                </div>
+            `;
+        }
+        document.getElementById("results").innerHTML = html;
+    }
+};
+
+// Запускаем после полной загрузки страницы
+window.addEventListener('DOMContentLoaded', function() {
+    Data.loadFromStorage();
+});
+</script>
+
+</body>
+</html>

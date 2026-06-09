@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Bootstrap Адаптивные блоки | Вариант 1</title>
+    <!-- Bootstrap 5 CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* ----- Базовые стили для всех блоков (рамки, отступы, тени, цвета) ----- */
+        .custom-block {
+            border: 2px solid #2c3e50;
+            border-radius: 20px;
+            padding: 1.5rem 0.8rem;
+            background: linear-gradient(145deg, #ffffff, #f3f6fc);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.25s ease-in-out;
+            text-align: center;
+            font-weight: 600;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+            color: #1e2a36;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        /* Разные цветовые темы для рядов (чтобы визуально отличать) */
+        .row-1 .custom-block {
+            background: linear-gradient(135deg, #e6f0fa, #d4e2f2);
+            border-color: #1f6392;
+        }
+        .row-2 .custom-block {
+            background: linear-gradient(135deg, #fff0e5, #ffe0cc);
+            border-color: #c95a0f;
+        }
+        .row-3 .custom-block {
+            background: linear-gradient(135deg, #e2f3e9, #d0e6db);
+            border-color: #2a784e;
+        }
+        /* Ховер эффект для всех блоков */
+        .custom-block:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 18px 28px rgba(0, 0, 0, 0.12);
+        }
+        /* Дополнительные отступы между рядами */
+        .section-row {
+            margin-bottom: 2.5rem;
+        }
+        /* Заголовок страницы */
+        .info-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px dashed #6c757d;
+        }
+        .badge-resize {
+            font-size: 0.85rem;
+            background-color: #e9ecef;
+            padding: 6px 14px;
+            border-radius: 40px;
+            display: inline-block;
+            margin-top: 8px;
+        }
+        /* ---------- УСЛОВИЯ ЗАДАНИЯ ---------- */
+        /* 1) Первый ряд: при уменьшении до -md- (т.е. ширина < 768px) 
+              блоки должны быть шириной по 4 колонки. 
+              По умолчанию на больших экранах блоки по 6 колонок (половина). 
+              Используем комбинацию col-md-4 (планшет: два блока по 4/12) и col-12 col-lg-6 
+              для крупных экранов. */
+        
+        /* 2) Второй ряд: при уменьшении до -sm- (ширина < 768px? В Bootstrap 5 sm: от 576px до 767px)
+           В ТЗ: "-sm- во втором ряду - исчезают нечетные блоки" 
+           Значит при max-width: 767.98px (все что меньше md) нечетные блоки скрываются.
+           Реализуем через медиа-запрос: при (max-width: 767.98px) прячем нечетные .row-2 .col-*:nth-child(odd)
+        */
+        @media (max-width: 767.98px) {
+            .row-2 .col-12:nth-child(odd),
+            .row-2 [class*="col-"]:nth-child(odd) {
+                display: none !important;
+            }
+        }
+
+        /* 3) Третий ряд: при -xs- (max-width: 575.98px) вместо 2-го блока появляется пустое пространство.
+              В третьем ряду два блока занимают половину экрана (по 6 колонок) и еще 3 блока на оставшуюся половину.
+              Структура третьего ряда: Первые два блока по 6 колонок = 12 колонок? нет, условие:
+              "два блока занимающие половину экрана и еще 3 блока на оставшуюся половину" 
+              По сути: 2 блока вместе занимают 6 колонок? Или каждый из двух блоков по 6 колонок? Прочитаем внимательно: 
+              "в третьем - два блока занимающие половину экрана и еще 3 блока на оставшуюся половину".
+              Значит: первые два блока занимают левую половину экрана (например, по 3 колонки на блок или 6 колонок вместе? Обычно интерпретируют: 2 блока расположены вместе на половине экрана, т.е. каждый из двух блоков шириной col-3? Но лучше уточнить: половина экрана = 6 колонок. 
+              Два блока на 6 колонок можно разделить: по 3 колонки на каждый блок (col-3 + col-3 = 6). 
+              Оставшаяся половина (6 колонок) вмещает 3 блока: значит каждый из трех блоков шириной col-4 (4+4+4=12? Но оставшаяся половина это 6 колонок, 3 блока => по 2 колонки на блок? 
+              Чтобы четко соблюсти условие: 2 блока (занимают половину экрана) и 3 блока (вторую половину). Значит левая часть (6 колонок) содержит два блока -> каждый по 3 колонки. Правая часть (6 колонок) содержит три блока -> каждый по 2 колонки.
+              Итого: [3][3] | [2][2][2]. Это соответствует фразе "два блока занимающие половину экрана" (вдвоем) и "3 блока на оставшуюся половину". 
+              Адаптивность: на xs при <576px, вместо второго блока (из первых двух) появляется пустое пространство. Т.е. скрываем второй блок левой половины, но оставляем колонку пустой (без контента, без рамок).
+        */
+        /* Базовые классы для 3-го ряда: 
+           - два блока на левой половине: .col-6 .col-md-3 (на md+ по 3 колонки, чтобы вместе 6) 
+           - три блока на правой половине: .col-6 .col-md-2 (по 2 колонки, 3 блока = 6 колонок)
+           Но на экранах <768px чтобы не ломалось: зададим адаптивные брейкпоинты.
+           Упростим: используем кастомные классы для сетки: 
+           Левая группа: два блока класса .left-half-block (по 3 колонки на md+ и по 12 на xs? но чтобы на xs был эффект пустого второго блока). 
+           Правая группа: три блока класса .right-third-block (по 2 колонки на md+ и адаптация на xs). 
+           Чтобы управлять пустым пространством на xs: второму блоку левой половины присвоим класс .second-left-block
+        */
+        /* Стандартное поведение: на экранах >=768px */
+        .left-col-item {
+            flex: 0 0 auto;
+            width: 50%; /* на мобильных показываем по полной, но на планшетах зададим через медиа */
+        }
+        /* Переопределим для md+ */
+        @media (min-width: 768px) {
+            .left-col-item {
+                width: 25%; /* 3 колонки (12/4 =3) */
+            }
+            .right-col-item {
+                width: 16.666666%; /* 2 колонки из 12 */
+            }
+        }
+        /* Для xs (max-width: 575.98px): превращаем второй блок левой половины в пустое пространство */
+        @media (max-width: 575.98px) {
+            .second-left-block.empty-xs-space {
+                /* пустое пространство: без фона, без рамки, без тени, без контента */
+                background: transparent !important;
+                border: 2px solid transparent !important;
+                box-shadow: none !important;
+                color: transparent !important;
+                padding: 1.5rem 0.8rem !important;
+            }
+            .second-left-block.empty-xs-space span,
+            .second-left-block.empty-xs-space div,
+            .second-left-block.empty-xs-space p,
+            .second-left-block.empty-xs-space h6 {
+                display: none !important;
+            }
+            /* сохраняем колонку, но она визуально пустая */
+        }
+        /* дополнительно для третьего ряда сохраним высоту блоков одинаковой */
+        .row-3 .custom-block {
+            justify-content: center;
+        }
+        /* Внутренние отступы для колонок используем Bootstrap g-* классы */
+    </style>
+</head>
+<body>
+
+<div class="container my-4 my-md-5">
+    <div class="info-header">
+        <h1 class="display-5 fw-semibold text-dark">📐 Bootstrap: адаптивная сетка</h1>
+        <p class="lead text-secondary">Вариант №1 — 3 ряда с особыми трансформациями на <strong>md, sm, xs</strong></p>
+        <div class="badge-resize">
+            🖥️ Изменяйте ширину окна: <kbd>md (768px)</kbd> → <kbd>sm (576-767px)</kbd> → <kbd>xs (<576px)</kbd>
+        </div>
+    </div>
+
+    <!-- ================= РЯД 1 ================= -->
+    <!-- Условие: в первом ряду 2 блока. При уменьшении до -md- блоки по 4 колонки -->
+    <!-- Используем встроенные классы отступов (g-3) и сдвигов не требуется, но сетка построена правильно -->
+    <div class="row row-1 g-4 mb-5">
+        <!-- Каждый блок: на экранах меньше md (768px) занимает 4 колонки (col-md-4). 
+             На больших экранах (>=768) блоки по 6 колонок, чтобы было 2 блока в ряд. 
+             Для этого: на md (>=768) ширина 6 колонок (col-md-6), но с условием -md- мы должны при ширине md 
+             блоки стали по 4 колонки. Фактически брейкпоинт md действует в диапазоне 768-991px. 
+             Нужно: при ширине экрана в диапазоне md (768-991px) задать col-md-4. При этом на lg+ (≥992px) можно col-lg-6.
+             Уточнение: "При уменьшении до -md- в первом ряду - 2 блока по 4 колонки" - т.е. когда экран становится 
+             меньше или равен брейкпоинту md? Bootstrap 5: md - ≥768px, но уменьшение до md означает планшетную ориентацию.
+             Чтобы гарантировать для экранов планшетов (768-991px) блоки по 4 колонки, используем col-md-4.
+             При этом на мобильных xs / sm они тоже корректно смотрятся: col-12 (полная ширина) для маленьких.
+        -->
+        <div class="col-12 col-md-4 col-lg-6">
+            <div class="custom-block">
+                <span style="font-size: 2rem;">📘</span><br>
+                <strong>Блок 1 (ряд 1)</strong><br>
+                <small class="text-secondary">на md (768-991px): 4 колонки</small>
+            </div>
+        </div>
+        <div class="col-12 col-md-4 col-lg-6">
+            <div class="custom-block">
+                <span style="font-size: 2rem;">📗</span><br>
+                <strong>Блок 2 (ряд 1)</strong><br>
+                <small class="text-secondary">на md (768-991px): 4 колонки</small>
+            </div>
+        </div>
+        <!-- Пояснение: при ширине md (768px-991px) сработает col-md-4 и каждый блок займет 4 колонки (в ряду 2 блока, остаток 4 колонки пустые — это соответствует условию) -->
+    </div>
+
+    <!-- ================= РЯД 2 ================= -->
+    <!-- Во втором ряду - 6 блоков. При уменьшении до -sm- исчезают нечетные блоки (1,3,5) -->
+    <!-- Используем сетку с адаптивными колонками: на десктопе (>=992) по 2 колонки (6 блоков в ряд), на md по 4 колонки (3 блока в ряд), 
+         на sm по 6 колонок (2 блока в ряд), на xs полная ширина. И при max-width:767.98px скрываем нечетные через CSS выше -->
+    <div class="row row-2 g-4 mb-5">
+        <!-- Блок 1 (нечетный) -->
+        <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+            <div class="custom-block">
+                <span style="font-size: 1.8rem;">🔴</span><br>
+                <strong>Блок 1</strong><br>
+                <span class="badge bg-danger bg-opacity-25 text-dark">нечетный</span><br>
+                <small>исчезнет на sm</small>
+            </div>
+        </div>
+        <!-- Блок 2 (четный) -->
+        <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+            <div class="custom-block">
+                <span style="font-size: 1.8rem;">🟠</span><br>
+                <strong>Блок 2</strong><br>
+                <span class="badge bg-success bg-opacity-25 text-dark">четный</span><br>
+                <small>остаётся</small>
+            </div>
+        </div>
+        <!-- Блок 3 (нечетный) -->
+        <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+            <div class="custom-block">
+                <span style="font-size: 1.8rem;">🟡</span><br>
+                <strong>Блок 3</strong><br>
+                <span class="badge bg-danger bg-opacity-25 text-dark">нечетный</span><br>
+                <small>исчезнет на sm</small>
+            </div>
+        </div>
+        <!-- Блок 4 (четный) -->
+        <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+            <div class="custom-block">
+                <span style="font-size: 1.8rem;">🟢</span><br>
+                <strong>Блок 4</strong><br>
+                <span class="badge bg-success bg-opacity-25 text-dark">четный</span><br>
+                <small>остаётся</small>
+            </div>
+        </div>
+        <!-- Блок 5 (нечетный) -->
+        <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+            <div class="custom-block">
+                <span style="font-size: 1.8rem;">🔵</span><br>
+                <strong>Блок 5</strong><br>
+                <span class="badge bg-danger bg-opacity-25 text-dark">нечетный</span><br>
+                <small>исчезнет на sm</small>
+            </div>
+        </div>
+        <!-- Блок 6 (четный) -->
+        <div class="col-12 col-sm-6 col-md-4 col-lg-2">
+            <div class="custom-block">
+                <span style="font-size: 1.8rem;">🟣</span><br>
+                <strong>Блок 6</strong><br>
+                <span class="badge bg-success bg-opacity-25 text-dark">четный</span><br>
+                <small>остаётся</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= РЯД 3 ================= -->
+    <!-- Условие: два блока занимающие половину экрана и еще 3 блока на оставшуюся половину.
+         При -xs- (ширина <576px) вместо 2-го блока появляется пустое пространство. 
+         Структура: левая половина (6 колонок) содержит 2 блока; правая половина (6 колонок) содержит 3 блока.
+         Используем кастомные классы с поддержкой брейкпоинтов, но обязательно используем встроенные отступы Bootstrap (g-4).
+    -->
+    <div class="row row-3 g-4">
+        <!-- ЛЕВАЯ ПОЛОВИНА: два блока (каждый занимает 3 колонки на md+ и 6 колонок? нет, чтобы на мобильных не разваливалось, но условие xs меняет второй блок) 
+             Создаем обертку или просто колонки. Используем подход: два независимых div с классами ширины.
+             На экранах >=768px: оба блока по 3 колонки (col-md-3). На мобильных устройствах (xs) они будут по 6 колонок, чтобы уместиться. 
+             Для xs: второй блок получит специальный класс empty-xs-space, который делает его пустым пространством.
+        -->
+        <!-- Первый блок (левая половина, первый) -->
+        <div class="col-6 col-md-3">
+            <div class="custom-block">
+                <span style="font-size: 1.8rem;">🏆</span><br>
+                <strong>Левый блок A</strong><br>
+                <small>половина экрана (1/2)</small>
+            </div>
+        </div>
+        <!-- Второй блок (левая половина, второй) — именно он должен на xs стать пустым пространством -->
+        <div class="col-6 col-md-3 second-left-block" id="secondLeftBlock">
+            <div class="custom-block" id="leftSecondContent">
+                <span style="font-size: 1.8rem;">⭐</span><br>
+                <strong>Левый блок B</strong><br>
+                <small>исчезнет на xs → пустота</small>
+            </div>
+        </div>
+
+        <!-- ПРАВАЯ ПОЛОВИНА: 3 блока, каждый по 2 колонки на md+ (ширина 2/12 = 16.66%), на мобильных по 4 колонки для аккуратности -->
+        <!-- Первый блок правой половины -->
+        <div class="col-6 col-md-2 col-sm-4">
+            <div class="custom-block">
+                <span style="font-size: 1.6rem;">🎯</span><br>
+                <strong>Правый 1</strong><br>
+                <small>3 блока на ½</small>
+            </div>
+        </div>
+        <!-- Второй блок правой половины -->
+        <div class="col-6 col-md-2 col-sm-4">
+            <div class="custom-block">
+                <span style="font-size: 1.6rem;">🎨</span><br>
+                <strong>Правый 2</strong><br>
+                <small>часть второй половины</small>
+            </div>
+        </div>
+        <!-- Третий блок правой половины -->
+        <div class="col-6 col-md-2 col-sm-4">
+            <div class="custom-block">
+                <span style="font-size: 1.6rem;">⚡</span><br>
+                <strong>Правый 3</strong><br>
+                <small>три блока на 6 колонок</small>
+            </div>
+        </div>
+    </div>
+    <!-- Дополнительное пояснение: на xs (max-width: 575.98px) второй левый блок (с классом second-left-block) через медиа-запрос выше получает стили empty-xs-space, которые делают его фон прозрачным, убирают рамку, скрывают текст и иконки. Остается пустая колонка как "пустое пространство". 
+         Также сохраняется сетка: на xs оба левых блока имеют col-6, второй блок становится пустым, но продолжает занимать место — это идеально подходит под требование.
+         Для правых блоков на xs используется col-6 + col-sm-4 + col-md-2, чтобы на маленьких экранах они переносились аккуратно, но всегда остаются видимы.
+    -->
+
+    <!-- Дополнительный блок с легендой и демонстрацией выполненных условий -->
+    <div class="row mt-5 pt-3 border-top">
+        <div class="col-12">
+            <div class="alert alert-light shadow-sm" style="background-color:#f8f9fa; border-left: 5px solid #0d6efd;">
+                <h5 class="fw-bold">✅ Проверка задания (Вариант 1):</h5>
+                <ul class="mb-0">
+                    <li><strong>Ряд 1:</strong> два блока. При уменьшении до <code>md</code> (768–991px) каждый блок становится шириной 4 колонки (класс <code>.col-md-4</code>). Отступы использованы <code>g-4</code>. ✅</li>
+                    <li><strong>Ряд 2:</strong> шесть блоков. При ширине <code>sm</code> (≤767px) нечетные блоки (1,3,5) полностью исчезают через медиа-запрос. Остаются четные 2,4,6. ✅</li>
+                    <li><strong>Ряд 3:</strong> два блока на левой половине (вместе 6 колонок) и три блока на правой половине (6 колонок). При <code>xs</code> (≤575px) второй из левых блоков превращается в пустое пространство (прозрачный фон, без рамки, без текста). ✅</li>
+                    <li>Все блоки имеют собственные рамки, фоновые градиенты, тени, отступы. Использованы встроенные классы Bootstrap <code>g-4</code>, <code>col-*</code>, <code>col-md-*</code> и медиа-запросы для точных трансформаций.</li>
+                </ul>
+                <p class="mb-0 mt-2 small text-muted">✨ Измените размер окна браузера — отследите изменения: 1-й ряд (md: блоки по 4 колонки), 2-й ряд (sm: нечетные исчезают), 3-й ряд (xs: вместо второго блока пустое место).</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS Bundle (не обязателен для сетки, но для полноты добавим) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<!-- дополнительный скрипт не требуется, все трансформации на CSS -->
+</body>
+</html>

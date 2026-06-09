@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лаба: позиционирование</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #d9e2ec;
+            padding: 20px;
+        }
+
+        .site {
+            max-width: 1100px;
+            width: 90%;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .topbar {
+            background: #1e4663;
+            padding: 12px;
+            text-align: center;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .menu {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            list-style: none;
+            flex-wrap: wrap;
+        }
+
+        .menu a {
+            display: inline-block;
+            background: #2c6288;
+            color: white;
+            text-decoration: none;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: bold;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .menu a:hover {
+            transform: scale(1.15);
+            background: #f4a261;
+            color: #1e2f3a;
+            z-index: 30;
+        }
+
+        .menu a.active {
+            background: #f4a261;
+            color: #1e2f3a;
+        }
+
+        .page {
+            display: none;
+            padding: 25px;
+        }
+
+        .page.active-page {
+            display: block;
+        }
+
+        .ad {
+            background: #fff0db;
+            border-left: 6px solid #f4a261;
+            padding: 12px 18px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            border-radius: 16px;
+        }
+
+        .ad button {
+            background: #f4a261;
+            border: none;
+            padding: 6px 15px;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .two-cols {
+            column-count: 2;
+            column-gap: 30px;
+            column-rule: 1px solid #ccc;
+            text-align: justify;
+        }
+
+        .img-left {
+            float: left;
+            width: 140px;
+            margin: 0 18px 10px 0;
+            border-radius: 16px;
+            background: #abc9df;
+            padding: 8px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .pos-box {
+            background: #eef3fa;
+            padding: 15px;
+            margin: 20px 0 10px;
+            border-radius: 18px;
+            position: relative;
+        }
+
+        .badge-absolute {
+            position: absolute;
+            bottom: 8px;
+            right: 12px;
+            background: #f4a261;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+        .fixed-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1e4663;
+            color: white;
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 999;
+        }
+
+        .fixed-btn:hover {
+            background: #f4a261;
+        }
+footer {
+            background: #e2e8f0;
+            text-align: center;
+            padding: 12px;
+            font-size: 0.8rem;
+            border-radius: 0 0 20px 20px;
+        }
+        @media (max-width: 700px) {
+            .two-cols {
+                column-count: 1;
+            }
+            .img-left {
+                width: 110px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+<div class="site">
+    <div class="topbar">
+        <ul class="menu">
+            <li><a href="#" data-page="page1" class="nav-link active">Страница 1 — CSS</a></li>
+            <li><a href="#" data-page="page3" class="nav-link">Страница 3 — Таблицы</a></li>
+        </ul>
+    </div>
+
+    <div id="page1" class="page active-page">
+        <div class="ad">
+            <span>🔥 <strong>Курс по CSS</strong> — скидка 30% по коду "POSITION"</span>
+            <button onclick="alert('Реклама: site.com/css')">Записаться</button>
+        </div>
+
+        <div class="two-cols">
+            <div class="img-left">
+                ⭐️ FLOAT: LEFT
+            </div>
+            <p><strong>Каскадные таблицы стилей (CSS)</strong> — мощный механизм для оформления HTML. CSS проходит долгий путь развития.</p>
+
+            <div style="overflow: auto; margin: 15px 0;">
+                <img src="C:\Users\janaa\OneDrive\Desktop\тим.jpg" 
+                     alt="Тим Бернерс-Ли" 
+                     style="float: left; width: 80px; margin-right: 18px; border-radius: 50%;">
+                <p><strong>Тим Бернерс-Ли.</strong> Изобретатель HTML, HTTP, Всемирной паутины.</p>
+            </div>
+
+            <div style="overflow: auto; margin: 0 0 15px 0;">
+                <img src="C:\Users\janaa\OneDrive\Desktop\хокон.jpg" 
+                     alt="Хокон Виум Ли" 
+                     style="float: left; width: 80px; margin-right: 18px; border-radius: 50%;">
+                <p><strong>Хокон Виум Ли.</strong> Предложил концепцию каскадных таблиц стилей (CSS).</p>
+            </div>
+
+            <p><strong>CSS 2.1</strong> утверждён в 2009 году. <strong>CSS 3</strong> — масштабная редакция, которая сделала верстку быстрее и удобнее.</p>
+            <p>Здесь используется <strong>float: left</strong> (обтекание слева) и <strong>2 колонки</strong> — по варианту №1.</p>
+        </div>
+
+        <div class="pos-box">
+            <p><strong>relative + absolute:</strong> этот блок — position: relative. Оранжевый значок — position: absolute.</p>
+            <div class="badge-absolute">✨ absolute</div>
+        </div>
+
+    </div>
+
+    <div id="page3" class="page">
+        <div class="ad">
+            <span>🎯 <strong>Вёрстка на Grid/Flex</strong> — промокод "TABLEFREE"</span>
+            <button onclick="alert('Реклама: layout.example')">Узнать</button>
+        </div>
+
+        <div class="two-cols">
+            <div class="img-left">
+                🧩 FLOAT: LEFT
+            </div>
+            <p>Исторически первым способом раскладки были <strong>таблицы</strong>. Главное достоинство: ячейки выравниваются по сетке.</p>
+            <p><strong>Достоинства:</strong> простота, «резиновость». <strong>Недостатки:</strong> неадаптивность, нельзя обрезать длинные надписи.</p>
+            <table style="width:100%; border-collapse:collapse; background:#fef9ef; margin:15px 0; border:1px solid #ccc;">
+                <tr>
+                    <td style="border:1px solid #aaa; padding:6px;">Ячейка №1</td>
+                    <td style="border:1px solid #aaa; padding:6px;">Ячейка №2</td>
+                    <td style="border:1px solid #aaa; padding:6px;">Ячейка №3</td>
+<td style="border:1px solid #aaa; padding:6px;">Ячейка №4</td>
+                    <td style="border:1px solid #aaa; padding:6px;">Ячейка №5</td>
+                </tr>
+            </table>
+
+            <p><strong>Жёсткая раскладка (table-layout: fixed)</strong> — ширина задаётся явно. <strong>Автоматическая (auto)</strong> — содержимое не выходит за границы.</p>
+            <p>Таблица не может гибко адаптироваться. Дизайнер не может обрезать длинные надписи.</p>
+            <p>На этой странице: <strong>обтекание слева (float)</strong> и две колонки.</p>
+        </div>
+
+        <div class="pos-box">
+            <p><strong>relative + absolute:</strong> этот контейнер — relative, значок в углу — absolute.</p>
+            <div class="badge-absolute">📍 absolute</div>
+        </div>
+    </div>
+
+</div>
+
+<button class="fixed-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+    const page1 = document.getElementById('page1');
+    const page3 = document.getElementById('page3');
+    const links = document.querySelectorAll('.nav-link');
+
+    function showPage(pageId) {
+        if (pageId === 'page1') {
+            page1.classList.add('active-page');
+            page3.classList.remove('active-page');
+        } else {
+            page3.classList.add('active-page');
+            page1.classList.remove('active-page');
+        }
+        links.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('data-page') === pageId) {
+                link.classList.add('active');
+            }
+        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    links.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            showPage(link.getAttribute('data-page'));
+        });
+    });
+</script>
+</body>
+</html>
+

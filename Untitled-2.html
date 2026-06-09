@@ -1,70 +1,167 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Список учащихся</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            padding: 20px;
-        }
-        .student-list {
-            background-color: #f0f0f0;
-            border: 1px solid #ccc;
-            padding: 20px;
-            border-radius: 5px;
-            max-width: 400px;
-        }
-        .student-item {
-            padding: 5px 0;
-            border-bottom: 1px solid #ddd;
-        }
-        .title {
-            font-size: 18px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-    </style>
+<meta charset="UTF-8">
+<title>Анкета слушателя курсов</title>
+<style>
+    body { font-family: Arial; }
+    table { border-collapse: collapse; width: 100%; margin-top: 10px; }
+    td, th { border: 1px solid #ccc; padding: 5px; text-align: center; }
+    .total { margin-top: 10px; font-weight: bold; }
+</style>
 </head>
 <body>
-    <div class="student-list" id="output"></div>
 
-    <script>
-        let students = [];
-        let countInput = prompt("Введите количество учащихся в группе:");
-        if (countInput === null) {
-            document.getElementById("output").innerHTML = "<div class='title'>Операция отменена</div>";
-        } else {
-            let count = parseInt(countInput);
-            if (isNaN(count) || count <= 0) {
-                document.getElementById("output").innerHTML = "<div class='title'>Ошибка: введите корректное положительное число</div>";
+<h3>Анкета слушателя</h3>
+<form id="courseForm">
+    ФИО: <input type="text" name="fio" required placeholder="Введите ФИО"><br><br>
+    E-mail: <input type="email"><br><br>
+    Возраст: <input type="number"><br><br>
+    Адрес: <input type="text"><br><br>
+
+    <table>
+        <tr>
+            <th>Курс</th>
+            <th>Длительность</th>
+            <th>Язык</th>
+            <th>Отчетность</th>
+            <th>Стоимость</th>
+        </tr>
+
+        <tr>
+            <td><input type="checkbox" class="course" data-base="10"> Информатика</td>
+            <td>
+                <input type="radio" name="dur1" value="1">36
+                <input type="radio" name="dur1" value="1.5">64
+                <input type="radio" name="dur1" value="2">128
+            </td>
+            <td>
+                <select class="lang">
+                    <option value="1">Русский</option>
+                    <option value="1.2">Английский</option>
+                </select>
+            </td>
+            <td>
+                <select class="report">
+                    <option value="1">Экзамен</option>
+                    <option value="0.8">Зачет</option>
+                </select>
+            </td>
+            <td><input type="text" class="price" readonly></td>
+        </tr>
+
+        <tr>
+            <td><input type="checkbox" class="course" data-base="8"> Базы данных</td>
+            <td>
+                <input type="radio" name="dur2" value="1">36
+                <input type="radio" name="dur2" value="1.5">64
+                <input type="radio" name="dur2" value="2">128
+            </td>
+            <td>
+                <select class="lang">
+                    <option value="1">Русский</option>
+                    <option value="1.2">Английский</option>
+                </select>
+            </td>
+            <td>
+                <select class="report">
+                    <option value="1">Экзамен</option>
+                    <option value="0.8">Зачет</option>
+                </select>
+            </td>
+            <td><input type="text" class="price" readonly></td>
+        </tr>
+
+        <tr>
+            <td><input type="checkbox" class="course" data-base="6"> Сети</td>
+            <td>
+                <input type="radio" name="dur3" value="1">36
+                <input type="radio" name="dur3" value="1.5">64
+                <input type="radio" name="dur3" value="2">128
+            </td>
+            <td>
+                <select class="lang">
+                    <option value="1">Русский</option>
+                    <option value="1.2">Английский</option>
+                </select>
+            </td>
+            <td>
+                <select class="report">
+                    <option value="1">Экзамен</option>
+                    <option value="0.8">Зачет</option>
+                </select>
+            </td>
+            <td><input type="text" class="price" readonly></td>
+        </tr>
+
+        <tr>
+            <td><input type="checkbox" class="course" data-base="5"> Логика</td>
+            <td>
+                <input type="radio" name="dur4" value="1">36
+                <input type="radio" name="dur4" value="1.5">64
+                <input type="radio" name="dur4" value="2">128
+            </td>
+            <td>
+                <select class="lang">
+                    <option value="1">Русский</option>
+                    <option value="1.2">Английский</option>
+                </select>
+            </td>
+            <td>
+                <select class="report">
+                    <option value="1">Экзамен</option>
+                    <option value="0.8">Зачет</option>
+                </select>
+            </td>
+            <td><input type="text" class="price" readonly></td>
+        </tr>
+    </table>
+
+    <div class="total">
+        Общая стоимость:
+        <input type="text" id="total" readonly> у.е.
+    </div><br>
+
+    <button type="submit">Вычислить</button>
+    <button type="reset">Отменить</button>
+    <input type = "submit" value = "Отправить">
+</form>
+
+<script>
+document.getElementById("courseForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    let total = 0;
+    let rows = document.querySelectorAll("table tr");
+
+    rows.forEach((row, index) => {
+        if (index === 0) return;
+
+        let checkbox = row.querySelector(".course");
+        let priceField = row.querySelector(".price");
+
+        if (checkbox.checked) {
+            let base = parseFloat(checkbox.dataset.base);
+
+            let duration = row.querySelector("input[type=radio]:checked");
+            let lang = row.querySelector(".lang").value;
+            let report = row.querySelector(".report").value;
+
+            if (duration) {
+                let cost = base * duration.value * lang * report;
+                priceField.value = cost.toFixed(2);
+                total += cost;
             } else {
-                for (let i = 1; i <= count; i++) {
-                    let fullName = prompt(`Введите фамилию и имя учащегося №${i} (например: Иванов Иван):`);
-                    if (fullName === null) {
-                        alert("Ввод данных прерван. Список будет неполным.");
-                        break;
-                    }
-                    fullName = fullName.trim();
-                    if (fullName === "") {
-                        alert(`Для учащегося №${i} не введены данные. Пропускаем.`);
-                        continue;
-                    }
-                    
-                    students.push(fullName);
-                }
-                if (students.length === 0) {
-                    document.getElementById("output").innerHTML = "<div class='title'>Список учащихся пуст</div>";
-                } else {
-                    let html = `<div class='title'>Список учащихся группы (${students.length} человек):</div>`;
-                    for (let i = 0; i < students.length; i++) {
-                        html += `<div class='student-item'>${i + 1}. ${students[i]}</div>`;
-                    }
-                    document.getElementById("output").innerHTML = html;
-                }
+                priceField.value = "";
             }
+        } else {
+            priceField.value = "";
         }
-    </script>
+    });
+
+    document.getElementById("total").value = total.toFixed(2);
+});
+</script>
+
 </body>
 </html>

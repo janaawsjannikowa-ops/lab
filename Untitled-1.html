@@ -1,28 +1,534 @@
 <!DOCTYPE html>
+<html lang="ru">
 <head>
-    <title>Авторизация</title>
+    <meta charset="UTF-8">
+    <title>Анкета слушателя курсов | Расчёт стоимости обучения</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: system-ui, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+        }
+        body {
+            background: #eef2f5;
+            margin: 0;
+            padding: 30px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            max-width: 1300px;
+            width: 100%;
+            background: white;
+            border-radius: 32px;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.15);
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+        .form-header {
+            background: #1e3c5c;
+            color: white;
+            padding: 24px 30px;
+        }
+        .form-header h1 {
+            margin: 0 0 6px 0;
+            font-weight: 600;
+            font-size: 1.8rem;
+        }
+        .form-header p {
+            margin: 0;
+            opacity: 0.8;
+            font-size: 1rem;
+        }
+        .form-body {
+            padding: 28px 30px 20px 30px;
+        }
+        .personal-fields {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            background: #f8fafc;
+            padding: 20px 24px;
+            border-radius: 24px;
+            margin-bottom: 32px;
+            border: 1px solid #e2edf2;
+        }
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .field label {
+            font-weight: 600;
+            color: #0b2b3b;
+            font-size: 0.85rem;
+            letter-spacing: 0.3px;
+        }
+        .field label .required-star {
+            color: #c7362b;
+            font-size: 1.2rem;
+            vertical-align: middle;
+            margin-left: 3px;
+        }
+        .field input {
+            padding: 12px 14px;
+            border: 1px solid #cbdde6;
+            border-radius: 16px;
+            font-size: 0.95rem;
+            transition: 0.2s;
+            background: white;
+        }
+        .field input:focus {
+            outline: none;
+            border-color: #1e6f9f;
+            box-shadow: 0 0 0 3px rgba(30,111,159,0.2);
+        }
+        .error-msg {
+            font-size: 0.75rem;
+            color: #c7362b;
+            margin-top: 4px;
+            display: none;
+        }
+        .error-msg.show {
+            display: block;
+        }
+        .courses-table-wrapper {
+            overflow-x: auto;
+            margin: 20px 0 20px 0;
+            border-radius: 20px;
+            border: 1px solid #e0edf2;
+            background: white;
+        }
+        .courses-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            min-width: 720px;
+        }
+        .courses-table th {
+            background: #eef3f7;
+            padding: 16px 12px;
+            text-align: center;
+            font-weight: 600;
+            color: #1a4b6e;
+            border-bottom: 1px solid #d4e2e9;
+        }
+        .courses-table td {
+            padding: 14px 8px;
+            text-align: center;
+            border-bottom: 1px solid #e9f0f4;
+            vertical-align: middle;
+        }
+        .course-title {
+            font-weight: 700;
+            background-color: #f9fdfe;
+            text-align: left;
+            padding-left: 16px;
+        }
+        .duration-group {
+            display: flex;
+            gap: 18px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .duration-group label {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: normal;
+            cursor: pointer;
+            background: #f1f6f9;
+            padding: 5px 12px;
+            border-radius: 40px;
+            transition: all 0.1s;
+        }
+        .duration-group input {
+            margin: 0;
+            transform: scale(1);
+            cursor: pointer;
+        }
+        .lang-select, .report-select {
+            padding: 6px 12px;
+            border-radius: 30px;
+            border: 1px solid #bdd4df;
+            background: white;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+        .cost-cell {
+            font-weight: 700;
+            background: #fefce8;
+            color: #2c5a2e;
+        }
+        .total-cost-section {
+            background: #e9f2f9;
+            border-radius: 28px;
+            padding: 18px 28px;
+            margin-top: 28px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 20px;
+        }
+        .total-label {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1e3c5c;
+        }
+        .total-price {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #1f6e43;
+            background: white;
+            padding: 6px 22px;
+            border-radius: 60px;
+            letter-spacing: 1px;
+            box-shadow: inset 0 1px 2px #0001, 0 2px 5px #0001;
+        }
+        .actions {
+            display: flex;
+            gap: 20px;
+            justify-content: flex-end;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+        button {
+            border: none;
+            padding: 12px 28px;
+            font-weight: 600;
+            font-size: 1rem;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: 0.2s;
+            background: #eef2f5;
+            color: #1f4662;
+        }
+        button.primary {
+            background: #1f6e8c;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+        button.primary:hover {
+            background: #0f5a75;
+            transform: scale(0.97);
+        }
+        button:hover {
+            background: #dfe7ed;
+        }
+        .footnote {
+            font-size: 0.75rem;
+            text-align: right;
+            margin-top: 16px;
+            color: #5f7f9a;
+            border-top: 1px solid #e2edf2;
+            padding-top: 18px;
+        }
+        @media (max-width: 750px) {
+            .form-body { padding: 20px; }
+            .total-price { font-size: 1.5rem; padding: 4px 16px; }
+        }
+    </style>
 </head>
 <body>
-    <h1>Введите логин</h1>
-    <button onclick="askFullName()">Ввести логин</button>
-    <script>
-    function askFullName(){
-       let login = prompt("Введите логин:");
-       if (login === null) {
-         alert("Вход отменён");
-        } else if (login === "Админ") {
-            let password = prompt("Введите пароль:");
-            if (password === null) {
-                alert("Вход отменён");
-            } else if (password === "Чёрный Властелин") {
-                alert("Добро пожаловать!");
-            } else {
-                alert("Пароль неверен");
+<div class="container">
+    <div class="form-header">
+        <h1>📋 Анкета слушателя курсов</h1>
+        <p>Заполните личные данные, выберите параметры курсов — стоимость пересчитается автоматически</p>
+    </div>
+    <div class="form-body">
+        <div class="personal-fields">
+            <div class="field">
+                <label>ФИО <span class="required-star">*</span></label>
+                <input type="text" id="fullname" placeholder="Иванов Иван Иванович" autocomplete="name">
+                <div class="error-msg" id="fullnameError">Поле обязательно для заполнения</div>
+            </div>
+            <div class="field">
+                <label>E-mail</label>
+                <input type="email" id="email" placeholder="example@domain.com">
+            </div>
+            <div class="field">
+                <label>Возраст</label>
+                <input type="number" id="age" placeholder="например, 28">
+            </div>
+            <div class="field">
+                <label>Адрес</label>
+                <input type="text" id="address" placeholder="г. Москва, ул. Примерная">
+            </div>
+        </div>
+        <div class="courses-table-wrapper">
+            <table class="courses-table" id="coursesTable">
+                <thead>
+                <tr>
+                    <th>Название курсов</th>
+                    <th>Продолжительность (часов)</th>
+                    <th>Язык</th>
+                    <th>Отчетность</th>
+                    <th>Стоимость (у.е.)</th>
+                </tr>
+                </thead>
+                <tbody id="coursesBody">
+                </tbody>
+            </table>
+        </div>
+        <div class="total-cost-section">
+            <span class="total-label">💰 Общая стоимость обучения:</span>
+            <span class="total-price" id="totalCostDisplay">0 у.е.</span>
+        </div>
+
+        <div class="actions">
+            <button id="calculateBtn" class="primary">🧮 Вычислить / Пересчитать</button>
+            <button id="evaluateBtn">📋 Оценить (проверить анкету)</button>
+        </div>
+        <div class="footnote">
+            * Стоимость каждого курса зависит от выбранной продолжительности, языка и формы отчетности.<br>
+            Базовые цены: Информатика — 18 у.е., Базы данных — 6 у.е., Сети и Логика — 0 у.е. (могут модифицироваться).
+        </div>
+    </div>
+</div>
+<script>
+    const coursesData = [
+        { id: 0, name: "Информатика", basePrice: 18 },
+        { id: 1, name: "Базы данных", basePrice: 6 },
+        { id: 2, name: "Сети", basePrice: 0 },
+        { id: 3, name: "Логика", basePrice: 0 }
+    ];
+    const durationMultiplier = {
+        "36": 1.0,
+        "64": 1.45,   
+        "128": 1.95
+    };
+    const languageMultiplier = {
+        "Русский": 1.0,
+        "Английский": 1.25
+    };
+    const reportMultiplier = {
+        "Экзамен": 1.0,
+        "Зачёт": 0.85,
+        "Проект": 1.15
+    };
+    let courseSettings = [];
+    function initCourseSettings() {
+        courseSettings = coursesData.map(course => ({
+            courseId: course.id,
+            duration: "36",
+            language: "Русский",
+            report: "Экзамен"
+        }));
+    }
+    function calculateCoursePrice(course, settings) {
+        const base = course.basePrice;
+        const durMult = durationMultiplier[settings.duration] || 1.0;
+        const langMult = languageMultiplier[settings.language] || 1.0;
+        const repMult = reportMultiplier[settings.report] || 1.0;
+        let total = base * durMult * langMult * repMult;
+        return Math.round(total * 100) / 100;
+    }
+    function computeTotalCost() {
+        let total = 0;
+        for (let i = 0; i < coursesData.length; i++) {
+            const course = coursesData[i];
+            const settings = courseSettings[i];
+            if (settings) {
+                total += calculateCoursePrice(course, settings);
             }
+        }
+        return total;
+    }
+    function renderTableAndTotal() {
+        const tbody = document.getElementById('coursesBody');
+        if (!tbody) return;
+        tbody.innerHTML = '';
+        
+        for (let idx = 0; idx < coursesData.length; idx++) {
+            const course = coursesData[idx];
+            const settings = courseSettings[idx];
+            if (!settings) continue;           
+            const price = calculateCoursePrice(course, settings);
+            const row = document.createElement('tr');
+            const nameCell = document.createElement('td');
+            nameCell.className = 'course-title';
+            nameCell.textContent = course.name;
+            row.appendChild(nameCell);
+            const durationCell = document.createElement('td');
+            const durationDiv = document.createElement('div');
+            durationDiv.className = 'duration-group';
+            const durations = ["36", "64", "128"];
+            durations.forEach(dur => {
+                const label = document.createElement('label');
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.name = `duration_${course.id}`;
+                radio.value = dur;
+                if (settings.duration === dur) radio.checked = true;
+                radio.addEventListener('change', (e) => {
+                    if (e.target.checked) {
+                        courseSettings[idx].duration = dur;
+                        renderTableAndTotal(); 
+                    }
+                });
+                label.appendChild(radio);
+                label.appendChild(document.createTextNode(`${dur} ч`));
+                durationDiv.appendChild(label);
+            });
+            durationCell.appendChild(durationDiv);
+            row.appendChild(durationCell);
+            const langCell = document.createElement('td');
+            const langSelect = document.createElement('select');
+            langSelect.className = 'lang-select';
+            const langOptions = ["Русский", "Английский"];
+            langOptions.forEach(lang => {
+                const option = document.createElement('option');
+                option.value = lang;
+                option.textContent = lang;
+                if (settings.language === lang) option.selected = true;
+                langSelect.appendChild(option);
+            });
+            langSelect.addEventListener('change', (e) => {
+                courseSettings[idx].language = e.target.value;
+                renderTableAndTotal();
+            });
+            langCell.appendChild(langSelect);
+            row.appendChild(langCell);
+            const reportCell = document.createElement('td');
+            const reportSelect = document.createElement('select');
+            reportSelect.className = 'report-select';
+            const reportOptions = ["Экзамен", "Зачёт", "Проект"];
+            reportOptions.forEach(rep => {
+                const option = document.createElement('option');
+                option.value = rep;
+                option.textContent = rep;
+                if (settings.report === rep) option.selected = true;
+                reportSelect.appendChild(option);
+            });
+            reportSelect.addEventListener('change', (e) => {
+                courseSettings[idx].report = e.target.value;
+                renderTableAndTotal();
+            });
+            reportCell.appendChild(reportSelect);
+            row.appendChild(reportCell);
+            const costCell = document.createElement('td');
+            costCell.className = 'cost-cell';
+            costCell.textContent = `${price.toFixed(2)} у.е.`;
+            row.appendChild(costCell);
+            
+            tbody.appendChild(row);
+        }
+        const total = computeTotalCost();
+        const totalSpan = document.getElementById('totalCostDisplay');
+        if (totalSpan) totalSpan.textContent = `${total.toFixed(2)} у.е.`;
+    }
+    function validatePersonalData() {
+        const fullnameInput = document.getElementById('fullname');
+        const errorDiv = document.getElementById('fullnameError');
+        let isValid = true;
+        const nameValue = fullnameInput.value.trim();
+        if (nameValue === "") {
+            errorDiv.classList.add('show');
+            isValid = false;
         } else {
-            alert("Я вас не знаю");
+            errorDiv.classList.remove('show');
+        }
+        return isValid;
+    }
+    function evaluateForm() {
+        const isPersonalValid = validatePersonalData();
+        const fullname = document.getElementById('fullname').value.trim() || "(не указано)";
+        const email = document.getElementById('email').value.trim() || "(не указан)";
+        const age = document.getElementById('age').value || "(не указан)";
+        const address = document.getElementById('address').value.trim() || "(не указан)";
+        
+        if (!isPersonalValid) {
+            alert("⚠️ Ошибка: поле ФИО обязательно для заполнения. Пожалуйста, укажите ваше ФИО.");
+            return false;
+        }
+        let coursesDetails = "";
+        for (let i = 0; i < coursesData.length; i++) {
+            const course = coursesData[i];
+            const settings = courseSettings[i];
+            const price = calculateCoursePrice(course, settings);
+            coursesDetails += `\n• ${course.name}: продолжительность ${settings.duration} ч, язык ${settings.language}, отчетность ${settings.report} → ${price.toFixed(2)} у.е.`;
+        }
+        const total = computeTotalCost();
+        const message = `📌 АНКЕТА СЛУШАТЕЛЯ\n\n` +
+                        `👤 ФИО: ${fullname}\n` +
+                        `📧 E-mail: ${email}\n` +
+                        `🎂 Возраст: ${age}\n` +
+                        `🏠 Адрес: ${address}\n\n` +
+                        `📚 ВЫБРАННЫЕ ПАРАМЕТРЫ КУРСОВ:${coursesDetails}\n\n` +
+                        `💰 ИТОГОВАЯ СТОИМОСТЬ ОБУЧЕНИЯ: ${total.toFixed(2)} у.е.\n\n` +
+                        `✅ Анкета заполнена корректно.`;
+        alert(message);
+        return true;
+    }
+    
+    // "Вычислить" - просто пересчитывает и обновляет таблицу + общую стоимость (также валидация ФИО по желанию, но по заданию "вычислить" опирается на параметры)
+    // Однако сделаем дружественно: при нажатии "Вычислить" также проверяем ФИО, но не блокируем расчет стоимости, а выводим предупреждение, но стоимость всё равно пересчитывается
+    // Для соответствия логике: кнопка "Вычислить" пересчитывает стоимость в соответствии с текущим выбором.
+    function recalcAndUpdate() {
+        // Валидация ФИО для обратной связи, но не блокируем обновление интерфейса (стоимость уже меняется при любом изменении параметров)
+        const isNameValid = validatePersonalData();
+        if (!isNameValid) {
+            // Показываем мягкое предупреждение, но не сбрасываем расчёт (пользователь может заполнить позже)
+            const nameError = document.getElementById('fullnameError');
+            if (nameError) nameError.classList.add('show');
+        } else {
+            const nameError = document.getElementById('fullnameError');
+            if (nameError) nameError.classList.remove('show');
+        }
+        // Таблица уже реактивна, но принудительно вызовем рендер (на всякий случай)
+        renderTableAndTotal();
+        // Дополнительно можно показать уведомление
+        const total = computeTotalCost();
+        // Лёгкая обратная связь в консоль или тост, но не обязательно
+    }
+    
+    // Функция инициализации DOM: создание начальных настроек и привязка обработчиков
+    function init() {
+        initCourseSettings();
+        renderTableAndTotal();
+        
+        // Привязка кнопок
+        const calculateBtn = document.getElementById('calculateBtn');
+        const evaluateBtn = document.getElementById('evaluateBtn');
+        
+        if (calculateBtn) {
+            calculateBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                recalcAndUpdate();
+            });
+        }
+        if (evaluateBtn) {
+            evaluateBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                evaluateForm();
+            });
+        }
+        
+        // Также при изменении текстовых полей можно убирать ошибку ФИО
+        const fullnameInput = document.getElementById('fullname');
+        if (fullnameInput) {
+            fullnameInput.addEventListener('input', () => {
+                const errorDiv = document.getElementById('fullnameError');
+                if (fullnameInput.value.trim() !== "") {
+                    errorDiv.classList.remove('show');
+                } else {
+                    // если пусто, но пока не показываем ошибку до попытки оценить, но для UX покажем при потере фокуса
+                }
+            });
+            fullnameInput.addEventListener('blur', () => {
+                if (fullnameInput.value.trim() === "") {
+                    document.getElementById('fullnameError').classList.add('show');
+                } else {
+                    document.getElementById('fullnameError').classList.remove('show');
+                }
+            });
         }
     }
-    </script>
+    
+    // Запуск после полной загрузки DOM
+    window.addEventListener('DOMContentLoaded', init);
+</script>
 </body>
 </html>
